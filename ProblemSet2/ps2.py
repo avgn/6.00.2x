@@ -139,7 +139,7 @@ class RectangularRoom(object):
         """
         x_pos = pos.getX()
         y_pos = pos.getY()
-        if x_pos >= 0 and x_pos <= self.width and y_pos >= 0 and y_pos <= self.height:
+        if x_pos >= float(0) and x_pos < self.width and y_pos >= float(0) and y_pos < self.height:
             return True
         return False
 
@@ -272,8 +272,8 @@ def runSimulation(num_robots, speed, width, height, min_coverage, num_trials,
             for robot in robots:
                 #anim.update(room, robots)
                 robot.updatePositionAndClean()
-                time += 1
                 tiles_cleaned = room.getNumCleanedTiles()
+            time += 1
         time_steps.append(time)
         #anim.done()
     return sum(time_steps)/float(len(time_steps))
