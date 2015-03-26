@@ -471,4 +471,26 @@ def simulationWithDrug(numViruses, maxPop, maxBirthProb, clearProb, resistances,
     
     """
 
-    # TODO
+    avgPopSize = [0.0 for x in range(300)]
+    avgGuttagonolResistantPop = [0.0 for x in range(300)]
+    for n in range(numTrials):
+        viruses = [ResistantVirus(maxBirthProb, clearProb, resistances, mutProb) for n in range(numViruses)]
+        patient = TreatedPatient(viruses, maxPop)
+        for i in range(150):
+            patient.update()
+            avgPopSize[i] += patient.getTotalPop()
+            avgGuttagonolResistantPop[i] += patient.getResistPop(['guttagonol'])
+        patient.addPrescription('guttagonol')
+        for j in range(150, 300):
+            patient.update()
+            avgPopSize[j] += patient.getTotalPop()
+            avgGuttagonolResistantPop[j] += patient.getResistPop(['guttagonol'])
+    avgPopSize = [x/numTrials for x in avgPopSize]
+    avgGuttagonolResistantPop = [x/numTrials for x in avgGuttagonolResistantPop]
+    pylab.plot(avgPopSize, label = 'avg pop size')
+    pylab.plot(avgGuttagonolResistantPop, label = 'avg pop size guttagonol-resistant')
+    pylab.xlabel("Time")
+    pylab.ylabel("Average Population Size")
+    pylab.title("Average Size of the Virus Populations")
+    pylab.legend(loc = 'best')
+    pylab.show()
